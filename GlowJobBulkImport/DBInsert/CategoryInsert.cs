@@ -24,17 +24,10 @@ namespace GlowJobBulkImport.DBInsert
             using (MySqlConnection mConnection = new MySqlConnection("Server=localhost;Database=homestead;Uid=homestead;Password=homestead;Port=3306;"))
             {
 
-                mConnection.Open();
+              
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                string cat = "DELETE FROM categories";
-                string job = "DELETE FROM categories_job_types";
-                MySqlCommand cmdCat = new MySqlCommand(cat, mConnection);
-                MySqlCommand cmdJob = new MySqlCommand(job, mConnection);
-                cmdJob.ExecuteNonQuery();
-                cmdCat.ExecuteNonQuery();
-              
-                mConnection.Close();
+                DeleteRecordsResetId(mConnection);
                 foreach (DataRow dr in dataRow)
                 {
                     var id = (String.IsNullOrEmpty(Convert.ToString(dr[2]))) ? "NULL" : dr[2];
@@ -88,6 +81,27 @@ namespace GlowJobBulkImport.DBInsert
                 }
                 mConnection.Close();
             }
+        }
+
+
+        public void DeleteRecordsResetId(MySqlConnection mConnection)
+        {
+            mConnection.Open();
+            string cat = "DELETE FROM categories;";
+            string job = "DELETE FROM categories_job_types";
+            MySqlCommand cmdCat = new MySqlCommand(cat, mConnection);
+            MySqlCommand cmdJob = new MySqlCommand(job, mConnection);
+            cmdJob.ExecuteNonQuery();
+            cmdCat.ExecuteNonQuery();
+
+           
+            string idReset = "ALTER TABLE categories_job_types AUTO_INCREMENT = 1";
+            MySqlCommand cmdIdReset = new MySqlCommand(idReset, mConnection);
+         
+            cmdIdReset.ExecuteNonQuery();
+           
+
+            mConnection.Close();
         }
     }
 }
