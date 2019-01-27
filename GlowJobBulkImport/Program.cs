@@ -2,6 +2,7 @@
 using System.IO;
 using ExcelDataReader;
 using GlowJobBulkImport.DBInsert;
+using Microsoft.Extensions.Configuration;
 
 namespace GlowJobBulkImport
 {
@@ -9,11 +10,10 @@ namespace GlowJobBulkImport
     {
         public static void Main(String[] args)
         {
-            if (args.Length == 0)
-            {
-                Console.WriteLine("No Aruguments Provided");
-                Environment.Exit(1);
-            }
+            IConfiguration config = new ConfigurationBuilder()
+                                         .AddJsonFile("appsettings.json", true, true)
+                                         .Build();
+            Console.WriteLine(config.GetConnectionString("DefaultConnection"));
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var stream = File.Open(@"/Users/satz/Downloads/CategoryandContent.xlsx", FileMode.Open, FileAccess.Read))
             {

@@ -4,17 +4,14 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace GlowJobBulkImport.DBInsert
 {
     public class CategoryInsert
     {
-       protected readonly IConfiguration  config = new ConfigurationBuilder()
-                                         .AddJsonFile("appsettings.json", true, true)
-                                         .Build();
-           
+     
+
         public void BulkToMariadb(DataRowCollection dataRow)
         {
             var category = new List<string>();
